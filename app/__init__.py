@@ -59,13 +59,13 @@ def registerConfirming():
         return render_template('register.html', error_type = "Passwords do not match, try again")
     #Then checks if the username exists
     elif u in usernames_list:
-        return render_template('register.html', error_type = "Username already exists, try again")
+        return render_template('register.html', error_type = "Username already exists, please try again.")
     #If both pass, it adds the newly registered user and directs the user to the login page
     else:
         c1 = db.cursor()
         c1.execute("INSERT INTO users (username, password, contributions) VALUES (?, ?, ?)", (u, p, c))
         db.commit()
-        return render_template("login.html", error_type = "Please login with your new account")
+        return render_template("login.html", error_type = "Please login with your new account.")
 db.close()
 
 #Checks credentials of login attempt
@@ -92,7 +92,7 @@ def welcome():
             i = u_list.index(username)
             return render_template('homepage.html', user = username)
     else:
-        return render_template('login.html', error_type = "Invalid login attempt, try again")
+        return render_template('login.html', error_type = "Invalid login attempt, please try again.")
     return render_template ('homepage.html')  #response to a form submission
 db.close()
 
