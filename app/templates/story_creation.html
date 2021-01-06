@@ -7,14 +7,15 @@ P0 - Da Art of Storytellin' (Pt. 2)
 <!DOCTYPE html>
 <html>
   <head>
-    <title> Creating Story Page </title>
+    <title> CREATE NEW STORY </title>
   </head>
   <body>
 
+    <h1> CREATE A NEW STORY </h1>
 
       {% if titleExists == 0 %}
-      <form action = "/story_check" method = "post">
-      <h1>    Create a Title:    </h1>
+      <form action = "/story_check">
+      <h2>    Create a Title:    </h2>
       <input type = "text" placeholder = "Title" name = "temp-title">
 
       <h2>    Insert Your Story Below:    </h2>
@@ -22,12 +23,12 @@ P0 - Da Art of Storytellin' (Pt. 2)
         <input type = "submit" value = "Create Story">
       </form>
       {% elif titleExists == 1 %}
-      <form action = "/story_check" method = "post">
+      <form action = "/story_check">
       <h3> Title Already Exists, please enter a new one: </h3>
       <input type = "text" placeholder = "Title" name = "temp-title">
-
+      
       <h4> Story: </h4>
-      <span> <h5> <input type = "text" value = "{{story}}" name = "story"> </h5> </span>
+      <span> <h5> <input type = "text" value = {{story}} name = "story"> </h5> </span>
       <input type = "submit" value = "Create Story">
       </form>
       {% endif %}
@@ -37,3 +38,4 @@ P0 - Da Art of Storytellin' (Pt. 2)
       </form>
 
   </body>
+</html>
