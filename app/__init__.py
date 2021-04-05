@@ -17,7 +17,6 @@ c = db.cursor()
 c.execute("""CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY, username text, password text, contributions text)""")
 c.execute("""CREATE TABLE IF NOT EXISTS stories (id INTEGER PRIMARY KEY, title text, entire text, recent text, contributors text)""")
 db.commit()
-db.close()
 
 app = Flask(__name__)    #create Flask object
 app.secret_key = os.urandom(32) #need this, if we didn't include this it would produce a runtime error
@@ -67,7 +66,7 @@ def registerConfirming():
         c1.execute("INSERT INTO users (username, password, contributions) VALUES (?, ?, ?)", (u, p, c))
         db.commit()
         return render_template("login.html", error_type = "Please login with your new account")
-db.close()
+
 
 #Checks credentials of login attempt
 @app.route("/auth", methods = ['GET', 'POST']) # methods=['GET', 'POST']
@@ -101,7 +100,7 @@ def welcome():
         return render_template('homepage.html', user = username, contribution_list = user_conts, message = "Your Login Has Been Successful! \(^-^)/")
     else:
         return render_template('login.html', error_type = "Invalid login attempt, please try again.")
-db.close()
+
 
 #Displays homepage when successful login
 @app.route("/homepage", methods = ['GET', 'POST'])
@@ -123,7 +122,6 @@ def returnHome():
         user_conts.pop()
 
     return render_template('homepage.html', user = session["user"], contribution_list = user_conts)
-db.close()
 
 #Asks user for a title for a new story
 @app.route("/create_story", methods = ['GET', 'POST'])
@@ -175,7 +173,7 @@ def story_check():
         c3.execute("UPDATE users SET contributions = ? WHERE username = ?", (updatedUserConts, username))
         db.commit()
         return render_template('story_view.html', entire = orig_story, title = title)
-db.close()
+
 
 #Displays a story
 @app.route("/story_view", methods = ['GET', 'POST'])
@@ -195,7 +193,7 @@ def story_view():
         recent_list.append(x[0])
     story_index = title_list.index(title)
     return render_template('story_view.html', entire = entire_list[story_index], recent = recent_list[story_index], title = title, editor = editor)
-db.close()
+
 
 #Displays stories that the user can edit
 @app.route("/story_edit", methods = ['GET', 'POST'])
@@ -215,7 +213,7 @@ def story_edit():
             list_output.append(list_titles[count])
         count = count + 1
     return render_template('story_edit.html', title_list = list_output)
-db.close()
+
 
 #Allows user to edit a story he hasn't already editted
 @app.route("/story_editor", methods = ['GET', 'POST'])
@@ -244,7 +242,7 @@ def story_editor():
 
     db.commit()
     return render_template('story_view.html', entire = new_text, title = title, editor = 1)
-db.close()
+
 
 #Displays login page and removes user from session
 @app.route("/logout", methods = ['GET', 'POST'])
@@ -252,6 +250,7 @@ def logout():
     session.pop("user", None) #removes the session
     return render_template('login.html')
 
+db.close()
 #Enables debugging, auto-restarting of server when this file is modified
 if __name__ == "__main__": #false if this file imported as module
     app.debug = True
